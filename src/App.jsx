@@ -1,5 +1,5 @@
 
-import React, {  useState } from 'react';
+import React, {  useState ,useEffect,useRef} from 'react';
 import { Icon } from "@iconify/react";
 import { motion , AnimatePresence } from "framer-motion";
 
@@ -16,16 +16,33 @@ export default function App() {
   const [weatherData, setWeatherData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  
+  const [darkMode, setDarkMode] = useState(false);
+
   const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
 
 
+  const inputFocus = useRef(null)
+
+
+  
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', darkMode);
+    inputFocus.current?.focus();
+  }, [darkMode]);
 
   function handleChange(e){
     setInputText(e.target.value)
 
 
   }
+
+  function toggleDarkMode(){
+    setDarkMode(prev=>!prev)
+
+
+  }
+
+
   function handleForm(e){
 
     e.preventDefault()
@@ -33,6 +50,11 @@ export default function App() {
     setLoading(true)
     setWeatherData(null)
 
+    if (!inputText.trim()) {
+      setError('Please enter a location.');
+      return;
+    }
+    
     const formattedLocation = inputText.charAt(0).toUpperCase() + inputText.slice(1).toLowerCase();
     setLocation(formattedLocation)
 
@@ -72,10 +94,12 @@ export default function App() {
     animate={{opacity:1}}
     transition={{duration:0.7, ease:"easeOut"}}
 
-     className="min-h-screen bg-[#CDCFFF] flex items-center  flex-col text-[#4F51E6]">
+     className="min-h-screen bg-[#CDCFFF] flex items-center  flex-col text-[#4F51E6] dark:bg-gray-900 dark:text-white">
+<button onClick={toggleDarkMode}   className="mt-4 mb-6 border p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition"  >
+  {darkMode ? 'Light Mode' : 'Dark Mode'}
+</button>
 
-
-<SearchBar   handleForm={handleForm} handleChange={handleChange} inputText={inputText}  />
+<SearchBar   handleForm={handleForm} handleChange={handleChange} inputText={inputText} inputFocus={inputFocus}  />
 
     {loading && <Loader/>} 
     {error && !loading && <ErrorMessage message={error} />} 
@@ -94,7 +118,14 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay:   0.5, duration: 0.4, ease: "easeOut" }}
             
-             className='bg-[#EEEDFF] rounded-full flex items-center gap-10 p-8 text-[#4F51E6] '>
+ className='rounded-full flex items-center gap-10 p-8 
+  bg-[#EEEDFF] text-[#4F51E6] dark:bg-gray-800 dark:text-white shadow-md'
+             
+             
+             >
+
+
+
               <div className='flex flex-col items-center gap-1 '>
             <Icon icon="material-symbols:blood-pressure" width="24" height="24" />
               <p>pressure</p>
@@ -123,7 +154,8 @@ export default function App() {
 
 
 
-            <p className="text-[#4F51E6] font-bold text-xl mb-8 mt-10 self-start ml-10">
+            <p className="font-bold text-xl mb-8 mt-10 self-start ml-10 
+  text-[#4F51E6] dark:text-white sm:self-center sm:mr-120" >
 
 
 

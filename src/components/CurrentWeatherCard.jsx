@@ -11,7 +11,7 @@ export default function CurrentWeatherCard({ weatherData, dayName }) {
       transition={{ duration: 0.5 }}
       className="text-white flex items-center m-10"
     >
-      <div className="flex flex-col gap-2 justify-center text-center text-[#4F51E6]">
+      <div className="flex flex-col gap-2 justify-center text-center text-[#4F51E6] dark:text-white">
         <p className="text-sm">
           {dayName}, {weatherData.city.name}, {weatherData.city.country}
         </p>
@@ -27,7 +27,7 @@ export default function CurrentWeatherCard({ weatherData, dayName }) {
       </div>
 
       <motion.img
-        className="left-83 top-43 h-45 w-45 absolute z-0 sm:right-50 sm:top-20 opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]"
+        className="left-83 top-43 h-45 w-45 absolute z-0 sm:left-210 sm:top-60 opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]"
         src={`http://openweathermap.org/img/wn/${current.weather[0].icon}.png`}
         alt="weather icon"
       />

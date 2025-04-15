@@ -1,12 +1,13 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
 
-export default function SearchBar({handleForm, handleChange, inputText}) {
+export default function SearchBar({handleForm, handleChange, inputText, inputFocus}) {
     return (<form onSubmit={handleForm} className='flex mt-10'>
 
   <div className='flex items-center'>
     <Icon icon="material-symbols:add-location-alt-rounded" width="30" height="30" />
-      <input type="text" className="border-b-2 border-b-black focus:border-b-white focus:border-b-4 p-2 outline-0" onChange={handleChange} value={inputText} placeholder='Location' />
+      <input type="text" className="border-b-2 border-b-black focus:border-b-white focus:border-b-4 p-2 outline-0 dark:border-b-white" onChange={handleChange} value={inputText} 
+      placeholder='Location' ref={inputFocus}  />
   </div>
 
 
