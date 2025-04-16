@@ -21,6 +21,8 @@ export default function App() {
 
 const [suggestions , setSuggestions ] = useState([])
 
+  const  [showLocationModal , setShowLocationModal ] = useState(true)
+
 
   const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
 const apiXkey = import.meta.env.VITE_RAPID_KEY
@@ -56,6 +58,44 @@ const debouncedFetch = useRef(debounce(fetchCities, 300)).current;
 
 
   }
+const getLocation = () => {
+  setShowLocationModal(false);
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+  
+      fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`)
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.json();
+        })
+        .then(data => {
+          setWeatherData(data);
+          setLocation(data.city.name);
+          setInputText(`${data.city.name}, ${data.city.country}`);
+        })
+        .catch(err => {
+          console.error('Geo error:', err);
+        });
+    });
+  }
+
+
+  useEffect(() => {
+    const savedMode = localStorage.getItem("darkMode");
+    if (savedMode !== null) {
+      setDarkMode(savedMode === "true");
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", darkMode);
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, [darkMode]);
+
+
+
+
+
 
   function toggleDarkMode(){
     setDarkMode(prev=>!prev)
@@ -155,6 +195,21 @@ if(!query) return
 
      className="min-h-screen bg-[#CDCFFF] flex items-center  flex-col text-[#4F51E6] dark:bg-gray-900 dark:text-white relative">
 
+{showLocationModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center">
+      <p className="mb-4">Want to use your current location to view the weather?</p>
+      <div className="flex justify-center gap-4">
+        <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={getLocation}>
+         Yes
+        </button>
+        <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={() => setShowLocationModal(false)}>
+          No
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
 
 

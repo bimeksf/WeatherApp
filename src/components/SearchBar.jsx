@@ -14,6 +14,9 @@ export default function SearchBar({ handleForm, handleChange, inputText, inputFo
   };
 
   return (
+
+
+    
     <form onSubmit={handleForm} className='flex mt-10'>
       <div className='flex items-center relative'>
         <Icon icon="material-symbols:add-location-alt-rounded" width="30" height="30" />
