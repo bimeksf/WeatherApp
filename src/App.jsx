@@ -3,6 +3,7 @@ import React, {  useState ,useEffect,useRef} from 'react';
 import { Icon } from "@iconify/react";
 import { motion , AnimatePresence } from "framer-motion";
 
+import Switch from './components/Switch';
 import SearchBar from './components/SearchBar';
 import Loader from './components/Loader';
 import ErrorMessage from './components/ErrorMessage';
@@ -18,8 +19,12 @@ export default function App() {
   const [error, setError] = useState(null)
   const [darkMode, setDarkMode] = useState(false);
 
-  const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+const [suggestions , setSuggestions ] = useState([])
 
+
+  const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+const apiXkey = import.meta.env.VITE_RAPID_KEY
+const apiXHost = import.meta.env.VITE_RAPID_HOST
 
   const inputFocus = useRef(null)
 
@@ -32,6 +37,7 @@ export default function App() {
 
   function handleChange(e){
     setInputText(e.target.value)
+    fetchCities(e.target.value)
 
 
   }
@@ -66,7 +72,8 @@ export default function App() {
       
       
       setWeatherData(data)
-      console.log(data)
+  fetchCities()
+
       
       setLoading(false)})
       .catch(error => {
@@ -84,6 +91,45 @@ export default function App() {
       
     )
   }
+
+
+  async function fetchCities(query){
+    
+if(!query) return 
+
+    const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix=${query}&limit=5`;
+    const options = {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-key': apiXkey,
+        'x-rapidapi-host': apiXHost
+      }
+    };
+    
+    try {
+      const response = await fetch(url, options);
+      const result = await response.json();
+      console.log(result.data);
+      setSuggestions(result.data  || []);
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
+
+
+
+  const list = suggestions && suggestions.length > 0 ? (
+    suggestions.map((item) => (
+      <li key={item.id}>
+        {item.city}, {item.country}
+      </li>
+    ))
+  ) : (
+    <li className="text-gray-400 italic p-2">No results found</li>
+  )
+
+
   
   const dailyForecasts = weatherData ? weatherData.list.filter(item => item.dt_txt.includes("12:00:00")) : []
   const dayName =weatherData ? new Date(weatherData.list[0].dt_txt).toLocaleDateString('en-EN', { weekday: 'long' }) : null;
@@ -95,15 +141,23 @@ export default function App() {
     transition={{duration:0.7, ease:"easeOut"}}
 
      className="min-h-screen bg-[#CDCFFF] flex items-center  flex-col text-[#4F51E6] dark:bg-gray-900 dark:text-white">
-<button onClick={toggleDarkMode}   className="mt-4 mb-6 border p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition"  >
-  {darkMode ? 'Light Mode' : 'Dark Mode'}
-</button>
+
+
+
+
+<Switch toggleDarkMode={toggleDarkMode}/> 
+
+
+
 
 <SearchBar   handleForm={handleForm} handleChange={handleChange} inputText={inputText} inputFocus={inputFocus}  />
 
     {loading && <Loader/>} 
     {error && !loading && <ErrorMessage message={error} />} 
 
+
+{/* list */}
+{suggestions && list} 
 
 
     <AnimatePresence mode="wait">
