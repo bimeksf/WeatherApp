@@ -19,6 +19,9 @@ const Switch = ({toggleDarkMode}) => {
 const StyledWrapper = styled.div`
   /* switch settings 👇 */
 margin-top: 16px;
+position:absolute;
+top:0;
+right:16px;
   .ui-switch {
     /* switch */
     --switch-bg: rgb(135, 150, 165);

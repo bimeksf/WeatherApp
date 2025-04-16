@@ -27,7 +27,7 @@ export default function CurrentWeatherCard({ weatherData, dayName }) {
       </div>
 
       <motion.img
-        className="left-83 top-43 h-45 w-45 absolute z-0 sm:left-210 sm:top-60 opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]"
+        className="left-83 top-43 h-45 w-45 absolute z-0 sm:right-50 sm:top-45 opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] md:left-275"
         src={`http://openweathermap.org/img/wn/${current.weather[0].icon}.png`}
         alt="weather icon"
       />

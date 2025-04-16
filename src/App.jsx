@@ -28,16 +28,31 @@ const apiXHost = import.meta.env.VITE_RAPID_HOST
 
   const inputFocus = useRef(null)
 
-
   
+function debounce(fn, delay) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
+}
+const debouncedFetch = useRef(debounce(fetchCities, 300)).current;
+
+
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
     inputFocus.current?.focus();
   }, [darkMode]);
 
   function handleChange(e){
-    setInputText(e.target.value)
-    fetchCities(e.target.value)
+    const value = e.target.value
+    setInputText(value)
+    
+    if(value.trim()){
+      debouncedFetch(value)
+    }else{setSuggestions([])}
+
+
 
 
   }
@@ -48,6 +63,12 @@ const apiXHost = import.meta.env.VITE_RAPID_HOST
 
   }
 
+  function onSuggestionClick(item){
+    setInputText(`${item.city}, ${item.country}`);
+    setSuggestions([]);
+    inputFocus.current.blur();
+  }
+
 
   function handleForm(e){
 
@@ -55,7 +76,7 @@ const apiXHost = import.meta.env.VITE_RAPID_HOST
     setError(null)
     setLoading(true)
     setWeatherData(null)
-
+    setInputText("")
     if (!inputText.trim()) {
       setError('Please enter a location.');
       return;
@@ -119,15 +140,7 @@ if(!query) return
 
 
 
-  const list = suggestions && suggestions.length > 0 ? (
-    suggestions.map((item) => (
-      <li key={item.id}>
-        {item.city}, {item.country}
-      </li>
-    ))
-  ) : (
-    <li className="text-gray-400 italic p-2">No results found</li>
-  )
+  
 
 
   
@@ -140,7 +153,7 @@ if(!query) return
     animate={{opacity:1}}
     transition={{duration:0.7, ease:"easeOut"}}
 
-     className="min-h-screen bg-[#CDCFFF] flex items-center  flex-col text-[#4F51E6] dark:bg-gray-900 dark:text-white">
+     className="min-h-screen bg-[#CDCFFF] flex items-center  flex-col text-[#4F51E6] dark:bg-gray-900 dark:text-white relative">
 
 
 
@@ -150,14 +163,13 @@ if(!query) return
 
 
 
-<SearchBar   handleForm={handleForm} handleChange={handleChange} inputText={inputText} inputFocus={inputFocus}  />
+<SearchBar   handleForm={handleForm} handleChange={handleChange} inputText={inputText} inputFocus={inputFocus} suggestions={suggestions} onSuggestionClick={onSuggestionClick} />
 
     {loading && <Loader/>} 
     {error && !loading && <ErrorMessage message={error} />} 
 
 
-{/* list */}
-{suggestions && list} 
+
 
 
     <AnimatePresence mode="wait">
