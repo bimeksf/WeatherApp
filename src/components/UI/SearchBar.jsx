@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
+import { motion } from 'framer-motion';
 
-export default function SearchBar({ handleForm, handleChange, inputText, inputFocus, suggestions, onSuggestionClick ,getLocation}) {
+export default function SearchBar({ error, handleForm, handleChange, inputText, inputFocus, suggestions, onSuggestionClick ,getLocation}) {
   const [dropdownVisible, setDropdownVisible] = useState(false); 
 
   const [activeIndex , setActiveIndex] = useState(0)
@@ -17,7 +18,15 @@ export default function SearchBar({ handleForm, handleChange, inputText, inputFo
 
 
     
-    <form onSubmit={handleForm} className='flex mt-20'>
+    <motion.form 
+    
+    animate={error ? { x: [-10, 10, -10, 10, 0] } : {}}
+  transition={{ duration: 0.3 }}
+    
+    
+    
+    
+    onSubmit={handleForm} className='flex mt-20'>
       <div className='flex items-center relative'>
         <Icon  className='cursor-pointer hover:scale-110 hover:text-white' icon="material-symbols:add-location-alt-rounded" width="30" height="30" onClick={getLocation} />
         <input
@@ -81,6 +90,6 @@ export default function SearchBar({ handleForm, handleChange, inputText, inputFo
       <button type='submit' className='bg-sky-800 p-2 text-white cursor-pointer rounded-md mx-2'>
         <Icon icon="material-symbols:add-2-rounded" className='hover:scale-110 hover:text-black' width="24" height="24" />
       </button>
-    </form>
+    </motion.form>
   );
 }
