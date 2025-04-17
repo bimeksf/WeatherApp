@@ -18,7 +18,7 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [darkMode, setDarkMode] = useState(false);
-
+  const [isReady, setIsReady] = useState(false);
 const [suggestions , setSuggestions ] = useState([])
 
   const  [showLocationModal , setShowLocationModal ] = useState(true)
