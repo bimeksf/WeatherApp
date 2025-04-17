@@ -12,11 +12,8 @@ export default function ForecastCard({ card, index }) {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.2, duration: 0.4, ease: 'easeOut' }}
-      whileHover={{
-        scale: 1.05,
-        transition: { duration: 0.2 },
-      }}
-      className="bg-[#4F51E6] rounded-md p-4 flex flex-col justify-center items-center w-25 text-white"
+      
+      className="bg-[#4F51E6] rounded-md p-2 flex flex-col justify-center items-center  text-white min-w-30  "
     >
       <p>{dayName}</p>
       <img

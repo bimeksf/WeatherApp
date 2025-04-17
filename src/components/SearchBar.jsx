@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 
-export default function SearchBar({ handleForm, handleChange, inputText, inputFocus, suggestions, onSuggestionClick }) {
-  const [dropdownVisible, setDropdownVisible] = useState(true); 
+export default function SearchBar({ handleForm, handleChange, inputText, inputFocus, suggestions, onSuggestionClick ,getLocation}) {
+  const [dropdownVisible, setDropdownVisible] = useState(false); 
 
   const [activeIndex , setActiveIndex] = useState(0)
 
@@ -17,9 +17,9 @@ export default function SearchBar({ handleForm, handleChange, inputText, inputFo
 
 
     
-    <form onSubmit={handleForm} className='flex mt-10'>
+    <form onSubmit={handleForm} className='flex mt-20'>
       <div className='flex items-center relative'>
-        <Icon icon="material-symbols:add-location-alt-rounded" width="30" height="30" />
+        <Icon  className='cursor-pointer hover:scale-110 hover:text-white' icon="material-symbols:add-location-alt-rounded" width="30" height="30" onClick={getLocation} />
         <input
           type="text"
           className="border-b-2 border-b-black focus:border-b-white focus:border-b-4 p-2 outline-0 dark:border-b-white"
@@ -79,7 +79,7 @@ export default function SearchBar({ handleForm, handleChange, inputText, inputFo
       </div>
 
       <button type='submit' className='bg-sky-800 p-2 text-white cursor-pointer rounded-md mx-2'>
-        <Icon icon="material-symbols:add-2-rounded" width="24" height="24" />
+        <Icon icon="material-symbols:add-2-rounded" className='hover:scale-110 hover:text-black' width="24" height="24" />
       </button>
     </form>
   );

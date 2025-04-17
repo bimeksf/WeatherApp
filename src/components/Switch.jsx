@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Switch = ({toggleDarkMode}) => {
+const Switch = ({toggleDarkMode,isDark }) => {
   return (
     <StyledWrapper>
       <label className="ui-switch ">
         <input type="checkbox" 
-          onClick={toggleDarkMode} 
+          onChange={toggleDarkMode} 
+          checked={isDark}
         />
         <div className="slider">
           <div className="circle" />

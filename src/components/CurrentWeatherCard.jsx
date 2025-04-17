@@ -19,18 +19,21 @@ export default function CurrentWeatherCard({ weatherData, dayName }) {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-8xl font-bold relative"
+          className="text-5xl font-bold relative"
         >
           {current.main.temp}°C
         </motion.p>
-        <p className="text-xl">{current.weather[0].main}</p>
-      </div>
-
+          <div className='flex justify-center items-center'>
+        <p className="text-sm">{current.weather[0].main}</p>
       <motion.img
-        className="left-83 top-43 h-45 w-45 absolute z-0 sm:right-50 sm:top-45 opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] md:left-275"
+        className="  h-30 w-30   opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] "
         src={`http://openweathermap.org/img/wn/${current.weather[0].icon}.png`}
         alt="weather icon"
       />
+
+          </div>
+      </div>
+
     </motion.div>
   );
 }

@@ -18,10 +18,7 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [darkMode, setDarkMode] = useState(false);
-  const [isReady, setIsReady] = useState(false);
 const [suggestions , setSuggestions ] = useState([])
-
-  const  [showLocationModal , setShowLocationModal ] = useState(true)
 
 
   const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
@@ -30,7 +27,14 @@ const apiXHost = import.meta.env.VITE_RAPID_HOST
 
   const inputFocus = useRef(null)
 
-  
+  if (typeof window !== "undefined") {
+  const savedMode = localStorage.getItem("darkMode");
+  if (savedMode === "true") {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+}
 function debounce(fn, delay) {
   let timer;
   return (...args) => {
@@ -41,10 +45,6 @@ function debounce(fn, delay) {
 const debouncedFetch = useRef(debounce(fetchCities, 300)).current;
 
 
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', darkMode);
-    inputFocus.current?.focus();
-  }, [darkMode]);
 
   function handleChange(e){
     const value = e.target.value
@@ -59,7 +59,6 @@ const debouncedFetch = useRef(debounce(fetchCities, 300)).current;
 
   }
 const getLocation = () => {
-  setShowLocationModal(false);
     navigator.geolocation.getCurrentPosition((position) => {
       const { latitude, longitude } = position.coords;
   
@@ -99,6 +98,7 @@ const getLocation = () => {
 
   function toggleDarkMode(){
     setDarkMode(prev=>!prev)
+
 
 
   }
@@ -188,6 +188,7 @@ if(!query) return
   const dayName =weatherData ? new Date(weatherData.list[0].dt_txt).toLocaleDateString('en-EN', { weekday: 'long' }) : null;
 
   return (
+
     <motion.div
     initial={{opacity:0}}
     animate={{opacity:1}}
@@ -195,30 +196,16 @@ if(!query) return
 
      className="min-h-screen bg-[#CDCFFF] flex items-center  flex-col text-[#4F51E6] dark:bg-gray-900 dark:text-white relative">
 
-{showLocationModal && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center">
-      <p className="mb-4">Want to use your current location to view the weather?</p>
-      <div className="flex justify-center gap-4">
-        <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={getLocation}>
-         Yes
-        </button>
-        <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={() => setShowLocationModal(false)}>
-          No
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
-
-
-<Switch toggleDarkMode={toggleDarkMode}/> 
 
 
 
 
-<SearchBar   handleForm={handleForm} handleChange={handleChange} inputText={inputText} inputFocus={inputFocus} suggestions={suggestions} onSuggestionClick={onSuggestionClick} />
+<Switch toggleDarkMode={toggleDarkMode} isDark={darkMode}/> 
+
+
+
+
+<SearchBar getLocation={getLocation}  handleForm={handleForm} handleChange={handleChange} inputText={inputText} inputFocus={inputFocus} suggestions={suggestions} onSuggestionClick={onSuggestionClick} />
 
     {loading && <Loader/>} 
     {error && !loading && <ErrorMessage message={error} />} 
