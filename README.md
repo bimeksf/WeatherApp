@@ -1,6 +1,6 @@
 # 🌤️ Weather Forecast App
 
-A sleek and modern weather forecast web application built with **React**, **Tailwind CSS**, and **Framer Motion**. It utilizes the **OpenWeatherMap API** for weather data and **GeoDB Cities API** for location suggestions.
+Weather forecast web application built with **React**, **Tailwind CSS**, and **Framer Motion**. It utilizes the **OpenWeatherMap API** for weather data and **GeoDB Cities API** for location suggestions.
 
 ---
 
